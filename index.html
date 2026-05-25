@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星座运势 - 每日运势 & 星座配对</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0c0f1d 0%, #1a1040 30%, #0d1b3e 70%, #0c0f1d 100%);
+    color: #e0e0e0;
+    overflow-x: hidden;
+  }
+
+  .stars {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--dur) ease-in-out infinite;
+    animation-delay: var(--delay);
+    opacity: 0;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  header {
+    text-align: center;
+    padding: 40px 20px 20px;
+  }
+
+  header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #c084fc, #e879f9, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  header .subtitle {
+    color: #a78bfa;
+    font-size: 1rem;
+    letter-spacing: 2px;
+  }
+
+  /* ---- mode tabs ---- */
+  .mode-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin: 10px 0 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    overflow: hidden;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .mode-tab {
+    padding: 10px 28px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    color: #94a3b8;
+    transition: all 0.3s ease;
+    user-select: none;
+    font-weight: 500;
+  }
+
+  .mode-tab.active {
+    background: rgba(139,92,246,0.25);
+    color: #e2e8f0;
+  }
+
+  .mode-tab:hover:not(.active) {
+    color: #cbd5e1;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .date-display {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+
+  /* ---- sign grid ---- */
+  .sign-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 640px) {
+    .sign-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    header h1 { font-size: 1.8rem; }
+  }
+
+  @media (max-width: 400px) {
+    .sign-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  }
+
+  .sign-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 18px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    user-select: none;
+  }
+
+  .sign-card:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(192,132,252,0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(139,92,246,0.15);
+  }
+
+  .sign-card.selected {
+    background: rgba(139,92,246,0.2);
+    border-color: rgba(192,132,252,0.6);
+    box-shadow: 0 0 24px rgba(139,92,246,0.25);
+  }
+
+  .sign-card.pair-selected {
+    background: rgba(236,72,153,0.18);
+    border-color: rgba(236,72,153,0.5);
+    box-shadow: 0 0 24px rgba(236,72,153,0.2);
+  }
+
+  .sign-icon {
+    font-size: 2.2rem;
+    margin-bottom: 6px;
+  }
+
+  .sign-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e2e8f0;
+  }
+
+  .sign-date-range {
+    font-size: 0.7rem;
+    color: #64748b;
+    margin-top: 2px;
+  }
+
+  /* ---- pairing selector ---- */
+  .pair-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .pair-sign-box {
+    background: rgba(255,255,255,0.04);
+    border: 2px dashed rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 140px;
+  }
+
+  .pair-sign-box:hover {
+    border-color: rgba(192,132,252,0.5);
+    background: rgba(255,255,255,0.07);
+  }
+
+  .pair-sign-box.filled {
+    border-style: solid;
+    border-color: rgba(192,132,252,0.5);
+    background: rgba(139,92,246,0.1);
+  }
+
+  .pair-sign-box .pair-sign-icon {
+    font-size: 2.4rem;
+  }
+
+  .pair-sign-box .pair-sign-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-top: 6px;
+  }
+
+  .pair-sign-box .pair-sign-hint {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 4px;
+  }
+
+  .pair-vs {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #a78bfa;
+  }
+
+  .pair-btn {
+    display: block;
+    margin: 0 auto 30px;
+    padding: 12px 40px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+  }
+
+  .pair-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(168,85,247,0.35);
+  }
+
+  .pair-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ---- detail panel ---- */
+  .detail-panel {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .detail-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .detail-icon {
+    font-size: 3rem;
+  }
+
+  .detail-info h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .detail-info .date-range {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+
+  .overall-score {
+    margin-left: auto;
+    text-align: center;
+  }
+
+  .score-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: conic-gradient(#c084fc calc(var(--score) * 1%), rgba(255,255,255,0.05) 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .score-circle.pair-score {
+    background: conic-gradient(#f472b6 calc(var(--score) * 1%), rgba(255,255,255,0.05) 0);
+  }
+
+  .score-circle::after {
+    content: '';
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #0f1328;
+  }
+
+  .score-circle .score-text {
+    position: relative;
+    z-index: 1;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #c084fc;
+  }
+
+  .score-circle.pair-score .score-text {
+    color: #f472b6;
+  }
+
+  .score-label {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    margin-top: 4px;
+  }
+
+  /* ---- pair header ---- */
+  .pair-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .pair-header-sign {
+    text-align: center;
+  }
+
+  .pair-header-sign .ph-icon {
+    font-size: 2.6rem;
+  }
+
+  .pair-header-sign .ph-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-top: 4px;
+  }
+
+  .pair-header-heart {
+    font-size: 1.8rem;
+    animation: heartbeat 1.2s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.25); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); }
+    60% { transform: scale(1); }
+  }
+
+  /* ---- fortune categories ---- */
+  .fortune-categories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .fortune-categories { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .fortune-cat {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .fortune-cat .cat-icon {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+  }
+
+  .fortune-cat .cat-name {
+    font-size: 0.85rem;
+    color: #a78bfa;
+    margin-bottom: 4px;
+  }
+
+  .fortune-cat .cat-stars {
+    color: #fbbf24;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+  }
+
+  .fortune-cat .cat-desc {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* ---- lucky section ---- */
+  .lucky-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .lucky-section { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .lucky-item {
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .lucky-item .lucky-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-bottom: 4px;
+  }
+
+  .lucky-item .lucky-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #e2e8f0;
+  }
+
+  .lucky-color-dot {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 6px;
+    border: 2px solid rgba(255,255,255,0.2);
+  }
+
+  .daily-advice {
+    background: rgba(139,92,246,0.08);
+    border-left: 3px solid #a78bfa;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  .daily-advice strong {
+    color: #c084fc;
+  }
+
+  .pair-advice {
+    background: rgba(236,72,153,0.06);
+    border-left: 3px solid #f472b6;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  .pair-advice strong {
+    color: #f472b6;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #64748b;
+  }
+
+  .empty-state .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+  }
+
+  .empty-state p {
+    font-size: 1rem;
+  }
+
+  footer {
+    text-align: center;
+    padding: 30px;
+    color: #475569;
+    font-size: 0.75rem;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+  <header>
+    <h1>星座运势</h1>
+    <p class="subtitle">DAILY HOROSCOPE & COMPATIBILITY</p>
+  </header>
+
+  <div class="mode-tabs">
+    <div class="mode-tab active" data-mode="fortune" onclick="switchMode('fortune')">每日运势</div>
+    <div class="mode-tab" data-mode="pair" onclick="switchMode('pair')">星座配对</div>
+  </div>
+
+  <div class="date-display" id="dateDisplay"></div>
+
+  <!-- 运势模式 -->
+  <div id="fortuneMode">
+    <div class="sign-grid" id="signGrid"></div>
+  </div>
+
+  <!-- 配对模式 -->
+  <div id="pairMode" class="hidden">
+    <div class="pair-selector">
+      <div class="pair-sign-box" id="pairBoxA" onclick="openSignPicker('A')">
+        <div class="pair-sign-icon">❓</div>
+        <div class="pair-sign-name">选择星座</div>
+        <div class="pair-sign-hint">点击选择</div>
+      </div>
+      <div class="pair-vs">×</div>
+      <div class="pair-sign-box" id="pairBoxB" onclick="openSignPicker('B')">
+        <div class="pair-sign-icon">❓</div>
+        <div class="pair-sign-name">选择星座</div>
+        <div class="pair-sign-hint">点击选择</div>
+      </div>
+    </div>
+    <button class="pair-btn" id="pairBtn" disabled onclick="doPair()">查看配对结果</button>
+    <div class="sign-grid hidden" id="signPicker"></div>
+  </div>
+
+  <div id="detailPanel"></div>
+
+  <footer>
+    仅供娱乐参考 · 愿你每一天都闪闪发光
+  </footer>
+</div>
+
+<script>
+const SIGNS = [
+  { name: '白羊座', icon: '♈', emoji: '🐏', dateRange: '3.21 - 4.19', element: '火', color: '#ef4444' },
+  { name: '金牛座', icon: '♉', emoji: '🐂', dateRange: '4.20 - 5.20', element: '土', color: '#f59e0b' },
+  { name: '双子座', icon: '♊', emoji: '👯', dateRange: '5.21 - 6.21', element: '风', color: '#84cc16' },
+  { name: '巨蟹座', icon: '♋', emoji: '🦀', dateRange: '6.22 - 7.22', element: '水', color: '#06b6d4' },
+  { name: '狮子座', icon: '♌', emoji: '🦁', dateRange: '7.23 - 8.22', element: '火', color: '#f97316' },
+  { name: '处女座', icon: '♍', emoji: '🌾', dateRange: '8.23 - 9.22', element: '土', color: '#22c55e' },
+  { name: '天秤座', icon: '♎', emoji: '⚖️', dateRange: '9.23 - 10.23', element: '风', color: '#e879f9' },
+  { name: '天蝎座', icon: '♏', emoji: '🦂', dateRange: '10.24 - 11.22', element: '水', color: '#a855f7' },
+  { name: '射手座', icon: '♐', emoji: '🏹', dateRange: '11.23 - 12.21', element: '火', color: '#ef4444' },
+  { name: '摩羯座', icon: '♑', emoji: '🐐', dateRange: '12.22 - 1.19', element: '土', color: '#6366f1' },
+  { name: '水瓶座', icon: '♒', emoji: '🏺', dateRange: '1.20 - 2.18', element: '风', color: '#3b82f6' },
+  { name: '双鱼座', icon: '♓', emoji: '🐟', dateRange: '2.19 - 3.20', element: '水', color: '#14b8a6' },
+];
+
+// 传统星座相性表（基于三方/六合相位）
+const COMPAT_MAP = {
+  '白羊座': ['狮子座','射手座','双子座','水瓶座'],
+  '金牛座': ['处女座','摩羯座','巨蟹座','双鱼座'],
+  '双子座': ['天秤座','水瓶座','白羊座','狮子座'],
+  '巨蟹座': ['天蝎座','双鱼座','金牛座','处女座'],
+  '狮子座': ['白羊座','射手座','双子座','天秤座'],
+  '处女座': ['金牛座','摩羯座','巨蟹座','天蝎座'],
+  '天秤座': ['双子座','水瓶座','狮子座','射手座'],
+  '天蝎座': ['巨蟹座','双鱼座','处女座','摩羯座'],
+  '射手座': ['白羊座','狮子座','天秤座','水瓶座'],
+  '摩羯座': ['金牛座','处女座','天蝎座','双鱼座'],
+  '水瓶座': ['双子座','天秤座','白羊座','射手座'],
+  '双鱼座': ['巨蟹座','天蝎座','金牛座','摩羯座'],
+};
+
+const ASPECTS = [
+  { key: 'love', name: '爱情', icon: '💕', descs: [
+    '桃花运不错，容易在社交场合遇到有趣的人，大胆展现自己吧。',
+    '感情生活平稳，与伴侣之间的默契度提升，适合深入交流。',
+    '单身者有机会收到意外的表白，保持开放的心态。',
+    '今天适合与心仪的对象共度时光，轻松的氛围让关系升温。',
+    '有伴侣的你需要注意倾听对方的心声，小惊喜能让感情保鲜。',
+    '感情上有些小波折，但不影响大局，多一些包容和理解。',
+  ]},
+  { key: 'career', name: '事业', icon: '💼', descs: [
+    '工作上会有新的机会出现，保持敏锐的洞察力，果断出击。',
+    '适合团队协作的一天，你的专业能力会得到同事的认可。',
+    '职场贵人运势强劲，可能得到上级或前辈的指点。',
+    '创意灵感迸发，适合做规划和战略性思考。',
+    '忙碌但充实，按部就班完成手头任务，不要急于求成。',
+    '今天适合学习和充电，提升专业技能对之后发展有帮助。',
+  ]},
+  { key: 'wealth', name: '财运', icon: '💰', descs: [
+    '财运平稳，适合做长线投资规划，不宜冲动消费。',
+    '偏财运不错，可能收到意外的礼物或红包。',
+    '正财运上升，工作带来的收入有望增加。',
+    '理财观念增强，适合整理账单和做预算规划。',
+    '有机会发现新的收入来源，保持开放的心态探索。',
+    '消费欲望较强，建议三思而后行，避免不必要的支出。',
+  ]},
+  { key: 'health', name: '健康', icon: '💪', descs: [
+    '精力充沛，适合进行户外运动和锻炼。',
+    '注意作息规律，早点休息有助于恢复精力。',
+    '身体状态良好，保持均衡饮食和适度运动。',
+    '小心肠胃问题，注意饮食卫生，少吃生冷食物。',
+    '精神状态不错，适合冥想或瑜伽来放松身心。',
+    '注意肩颈疲劳，工作间隙适当活动身体。',
+  ]},
+];
+
+const LUCKY_COLORS = [
+  { name: '紫色', hex: '#a855f7' }, { name: '金色', hex: '#eab308' },
+  { name: '粉色', hex: '#ec4899' }, { name: '蓝色', hex: '#3b82f6' },
+  { name: '绿色', hex: '#22c55e' }, { name: '橙色', hex: '#f97316' },
+  { name: '白色', hex: '#f8fafc' }, { name: '红色', hex: '#ef4444' },
+  { name: '银色', hex: '#94a3b8' }, { name: '黄色', hex: '#eab308' },
+];
+
+const LUCKY_DIRECTIONS = ['东南', '正北', '西南', '正东', '西北', '正南', '东北', '正西'];
+const ADVICE_TEMPLATES = [
+  '今天你的<strong>直觉</strong>非常敏锐，相信自己的第一感受。遇到选择困难时，不妨听听朋友的建议，<strong>贵人</strong>就在身边。',
+  '适合放慢脚步的一天。不要给自己太大压力，给自己一个<strong>微笑</strong>，好运自然会来。晚上适合和家人通个电话。',
+  '充满<strong>活力</strong>的一天！适合开启新计划或尝试新事物。保持积极的心态，<strong>机会</strong>会在不经意间出现。',
+  '今天需要多一些<strong>耐心</strong>，好事多磨。工作中注意细节，避免因疏忽造成返工。晚上适合泡个热水澡放松。',
+  '你的<strong>魅力值</strong>拉满！社交场合中你将是焦点。不过别忘了照顾自己的内心世界，找时间独处也很重要。',
+  '适合整理和<strong>规划</strong>的一天。把待办事项列出来，逐一完成会让你很有成就感。记得多喝水。',
+  '<strong>幸运</strong>之神在向你微笑！今天可能会有意想不到的好消息。保持开放的心态，迎接每一个可能性。',
+  '今天适合与老友<strong>相聚</strong>，聊聊近况。人际关系的温暖会给你带来力量。晚上适合看一部治愈的电影。',
+];
+
+// ---- 配对专用文案 ----
+const PAIR_CAT_DESCS = {
+  love: {
+    high: [
+      '灵魂级契合，心有灵犀一点通，感情火花四溅。你们是天造地设的一对。',
+      '彼此的吸引力极强，热恋感十足，在一起总是充满甜蜜和惊喜。',
+      '价值观高度一致，爱情观契合度极高，是让人羡慕的神仙眷侣。',
+    ],
+    mid: [
+      '相处需要耐心磨合，但只要互相包容，感情会日渐升温。',
+      '有共同的兴趣但表达方式不同，学会换位思考后关系会更进一步。',
+      '缘分不浅但也需要经营，偶尔的小浪漫能让感情保鲜。',
+    ],
+    low: [
+      '性格差异较大，磨合期可能比较辛苦，需要双方更多的理解和妥协。',
+      '相处模式需要适应，不太建议一见钟情式的闪恋，慢慢培养感情更稳。',
+    ],
+  },
+  friend: {
+    high: [
+      '志同道合的知己，一起玩耍总能擦出意想不到的火花，是彼此最好的搭档。',
+      '默契度极高，一个眼神就能懂对方的心思，友谊地久天长。',
+    ],
+    mid: [
+      '能聊得来但需要时间去沉淀感情，适合做一起逛街吃饭的搭子。',
+      '三观基本一致，偶尔有小分歧但不影响大局，是可以信赖的好友。',
+    ],
+    low: [
+      '性格迥异容易产生误会，保持适当的距离反而能让关系更舒适。',
+    ],
+  },
+  work: {
+    high: [
+      '黄金搭档组合，优势互补配合默契，合作项目往往能事半功倍。',
+      '思维方式相近，沟通成本低，适合一起创业或做项目。',
+    ],
+    mid: [
+      '各有所长但需要明确分工，找到各自的角色定位后合作会非常顺畅。',
+      '工作上可以互相学习，取长补短，适合成为彼此的职场导师。',
+    ],
+    low: [
+      '工作风格差异较大，配合需要更多磨合时间，不太建议成为直接上下级。',
+    ],
+  },
+};
+
+const PAIR_ADVICE = {
+  high: [
+    '你们是<strong>天作之合</strong>，珍惜这份难得的默契。无论爱情还是友谊，都能长久而美好。大胆去爱，勇敢去追！',
+    '缘分值拉满的一对！<strong>灵魂伴侣</strong>级别的契合度。在一起的日子，每一天都值得期待。',
+  ],
+  mid: [
+    '缘分不浅，但需要<strong>双向奔赴</strong>。多一些耐心和理解，你们的关系会越来越稳固。适合慢慢培养感情。',
+    '彼此有吸引也有差异，<strong>互补型</strong>组合。学会欣赏对方的不同之处，反而能让关系更有趣。',
+  ],
+  low: [
+    '性格差异较大，但<strong>不意味着没可能</strong>。如果真心喜欢，需要更多的包容和磨合。适合先做朋友慢慢了解。',
+    '缘分需要<strong>时间和耐心</strong>来浇灌。不必强求，顺其自然就好。保持开放的心态，惊喜也许就在转角处。',
+  ],
+};
+
+// ---- 工具函数 ----
+function seedRandom(seed) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) {
+    h = ((h << 5) - h) + seed.charCodeAt(i);
+    h |= 0;
+  }
+  return function() {
+    h = (h * 1103515245 + 12345) | 0;
+    return (h >>> 0) / 0xFFFFFFFF;
+  };
+}
+
+function getDaySeed() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+}
+
+function pick(arr, rng) {
+  return arr[Math.floor(rng() * arr.length)];
+}
+
+function getStars(score) {
+  const full = Math.round(score / 20);
+  return '★'.repeat(full) + '☆'.repeat(5 - full);
+}
+
+// ---- 运势模式 ----
+function generateFortune(sign) {
+  const seed = getDaySeed() + sign.name;
+  const rng = seedRandom(seed);
+
+  const categories = ASPECTS.map(aspect => {
+    const score = 55 + Math.floor(rng() * 45);
+    return { ...aspect, score, stars: getStars(score), desc: pick(aspect.descs, rng) };
+  });
+
+  const overall = Math.round(categories.reduce((s, c) => s + c.score, 0) / categories.length);
+
+  return {
+    overall, categories,
+    luckyColor: pick(LUCKY_COLORS, rng),
+    luckyNumber: Math.floor(rng() * 60) + 1,
+    luckyDirection: pick(LUCKY_DIRECTIONS, rng),
+    advice: pick(ADVICE_TEMPLATES, rng),
+    sign,
+  };
+}
+
+// ---- 配对模式 ----
+let pairSlotA = null;
+let pairSlotB = null;
+let pickingFor = null;
+
+function getPairScore(a, b) {
+  const rng = seedRandom(getDaySeed() + a.name + b.name);
+  const compatList = COMPAT_MAP[a.name];
+  const isCompat = compatList && compatList.includes(b.name);
+  const sameElement = a.element === b.element;
+
+  // 元素相生相克
+  const elementCompat = {
+    '火风': true, '风火': true, '水土': true, '土水': true,
+    '火土': false, '土火': false, '风水': false, '水风': false,
+  };
+  const elemKey = a.element + b.element;
+  const elemOk = a.element === b.element ? true : (elementCompat[elemKey] ?? null);
+
+  let base;
+  if (isCompat && sameElement) base = 78;
+  else if (isCompat) base = 72;
+  else if (sameElement) base = 65;
+  else if (elemOk === true) base = 60;
+  else if (elemOk === null) base = 50;
+  else base = 40;
+
+  return {
+    overall: base + Math.floor(rng() * 18),
+    love: { score: base + Math.floor(rng() * 20), key: 'love', name: '爱情', icon: '💕' },
+    friend: { score: base + Math.floor(rng() * 20) + 5, key: 'friend', name: '友情', icon: '🤝' },
+    work: { score: base + Math.floor(rng() * 20) - 2, key: 'work', name: '事业合作', icon: '🤝' },
+    rng,
+  };
+}
+
+function getLevel(score) {
+  if (score >= 85) return 'high';
+  if (score >= 65) return 'mid';
+  return 'low';
+}
+
+function openSignPicker(slot) {
+  if (pickingFor === slot) {
+    document.getElementById('signPicker').classList.add('hidden');
+    pickingFor = null;
+    return;
+  }
+  pickingFor = slot;
+  const picker = document.getElementById('signPicker');
+  picker.classList.remove('hidden');
+  picker.innerHTML = SIGNS.map((s, i) => `
+    <div class="sign-card" onclick="selectPairSign(${i})">
+      <div class="sign-icon">${s.icon}</div>
+      <div class="sign-name">${s.name}</div>
+      <div class="sign-date-range">${s.dateRange}</div>
+    </div>
+  `).join('');
+  picker.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function selectPairSign(index) {
+  const sign = SIGNS[index];
+  if (pickingFor === 'A') {
+    pairSlotA = sign;
+    updatePairBox('pairBoxA', sign);
+  } else {
+    pairSlotB = sign;
+    updatePairBox('pairBoxB', sign);
+  }
+  document.getElementById('signPicker').classList.add('hidden');
+  pickingFor = null;
+  updatePairBtn();
+}
+
+function updatePairBox(id, sign) {
+  const box = document.getElementById(id);
+  box.classList.add('filled');
+  box.innerHTML = `
+    <div class="pair-sign-icon">${sign.icon}</div>
+    <div class="pair-sign-name">${sign.name}</div>
+    <div class="pair-sign-hint">${sign.dateRange} · ${sign.element}象</div>
+  `;
+}
+
+function updatePairBtn() {
+  const btn = document.getElementById('pairBtn');
+  btn.disabled = !(pairSlotA && pairSlotB);
+}
+
+function doPair() {
+  if (!pairSlotA || !pairSlotB) return;
+  const a = pairSlotA, b = pairSlotB;
+  const data = getPairScore(a, b);
+  const cats = [data.love, data.friend, data.work];
+  const overall = Math.round(cats.reduce((s, c) => s + c.score, 0) / cats.length);
+  const level = getLevel(overall);
+
+  const panel = document.getElementById('detailPanel');
+  panel.innerHTML = `
+    <div class="detail-panel">
+      <div class="pair-header">
+        <div class="pair-header-sign">
+          <div class="ph-icon">${a.icon}</div>
+          <div class="ph-name">${a.name}</div>
+        </div>
+        <div class="pair-header-heart">💗</div>
+        <div class="pair-header-sign">
+          <div class="ph-icon">${b.icon}</div>
+          <div class="ph-name">${b.name}</div>
+        </div>
+        <div class="overall-score" style="margin-left:24px">
+          <div class="score-circle pair-score" style="--score: ${overall}">
+            <span class="score-text">${overall}</span>
+          </div>
+          <div class="score-label">配对指数</div>
+        </div>
+      </div>
+
+      <div class="fortune-categories">
+        ${cats.map(c => `
+          <div class="fortune-cat">
+            <div class="cat-icon">${c.icon}</div>
+            <div class="cat-name">${c.name}契合度</div>
+            <div class="cat-stars">${getStars(c.score)}</div>
+            <div class="cat-desc">${pick(PAIR_CAT_DESCS[c.key][getLevel(c.score)], data.rng)}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="pair-advice">
+        💫 ${pick(PAIR_ADVICE[level], data.rng)}
+      </div>
+    </div>
+  `;
+
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ---- 模式切换 ----
+let currentMode = 'fortune';
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+  document.getElementById('fortuneMode').classList.toggle('hidden', mode !== 'fortune');
+  document.getElementById('pairMode').classList.toggle('hidden', mode !== 'pair');
+  document.getElementById('detailPanel').innerHTML = '';
+
+  if (mode === 'pair') {
+    document.getElementById('signPicker').classList.add('hidden');
+    pickingFor = null;
+    pairSlotA = null;
+    pairSlotB = null;
+    resetPairBoxes();
+    updatePairBtn();
+  } else {
+    // 清除运势模式下的选中态
+    document.querySelectorAll('.sign-card').forEach(c => c.classList.remove('selected'));
+  }
+}
+
+function resetPairBoxes() {
+  ['pairBoxA', 'pairBoxB'].forEach(id => {
+    const box = document.getElementById(id);
+    box.classList.remove('filled');
+    box.innerHTML = `
+      <div class="pair-sign-icon">❓</div>
+      <div class="pair-sign-name">选择星座</div>
+      <div class="pair-sign-hint">点击选择</div>
+    `;
+  });
+}
+
+// ---- 运势模式渲染 ----
+function renderSignGrid() {
+  const grid = document.getElementById('signGrid');
+  grid.innerHTML = SIGNS.map((s, i) => `
+    <div class="sign-card" data-index="${i}" onclick="selectFortuneSign(${i})">
+      <div class="sign-icon">${s.icon}</div>
+      <div class="sign-name">${s.name}</div>
+      <div class="sign-date-range">${s.dateRange}</div>
+    </div>
+  `).join('');
+}
+
+function selectFortuneSign(index) {
+  document.querySelectorAll('#fortuneMode .sign-card').forEach(c => c.classList.remove('selected'));
+  const card = document.querySelector(`#fortuneMode [data-index="${index}"]`);
+  if (card) card.classList.add('selected');
+
+  const fortune = generateFortune(SIGNS[index]);
+  renderFortuneDetail(fortune);
+}
+
+function renderFortuneDetail(fortune) {
+  const panel = document.getElementById('detailPanel');
+  const { sign, overall, categories, luckyColor, luckyNumber, luckyDirection, advice } = fortune;
+
+  panel.innerHTML = `
+    <div class="detail-panel">
+      <div class="detail-header">
+        <div class="detail-icon">${sign.icon}</div>
+        <div class="detail-info">
+          <h2>${sign.name}</h2>
+          <div class="date-range">${sign.dateRange} · ${sign.element}象星座</div>
+        </div>
+        <div class="overall-score">
+          <div class="score-circle" style="--score: ${overall}">
+            <span class="score-text">${overall}</span>
+          </div>
+          <div class="score-label">综合运势</div>
+        </div>
+      </div>
+
+      <div class="fortune-categories">
+        ${categories.map(c => `
+          <div class="fortune-cat">
+            <div class="cat-icon">${c.icon}</div>
+            <div class="cat-name">${c.name}</div>
+            <div class="cat-stars">${c.stars}</div>
+            <div class="cat-desc">${c.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="lucky-section">
+        <div class="lucky-item">
+          <div class="lucky-label">幸运颜色</div>
+          <div class="lucky-value"><span class="lucky-color-dot" style="background:${luckyColor.hex}"></span>${luckyColor.name}</div>
+        </div>
+        <div class="lucky-item">
+          <div class="lucky-label">幸运数字</div>
+          <div class="lucky-value">${luckyNumber}</div>
+        </div>
+        <div class="lucky-item">
+          <div class="lucky-label">幸运方位</div>
+          <div class="lucky-value">${luckyDirection}</div>
+        </div>
+        <div class="lucky-item">
+          <div class="lucky-label">星座元素</div>
+          <div class="lucky-value">${sign.element}象星座</div>
+        </div>
+      </div>
+
+      <div class="daily-advice">💫 ${advice}</div>
+    </div>
+  `;
+
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function setDateDisplay() {
+  const d = new Date();
+  const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+  document.getElementById('dateDisplay').textContent =
+    `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日 星期${weekDays[d.getDay()]}`;
+}
+
+function createStars() {
+  const container = document.getElementById('stars');
+  let html = '';
+  for (let i = 0; i < 120; i++) {
+    const x = Math.random() * 100, y = Math.random() * 100;
+    const size = Math.random() * 2.5 + 0.5;
+    const dur = Math.random() * 4 + 3, delay = Math.random() * 6;
+    html += `<div class="star" style="left:${x}%;top:${y}%;width:${size}px;height:${size}px;--dur:${dur}s;--delay:${delay}s"></div>`;
+  }
+  container.innerHTML = html;
+}
+
+// ---- 初始化 ----
+createStars();
+setDateDisplay();
+renderSignGrid();
+</script>
+</body>
+</html>
