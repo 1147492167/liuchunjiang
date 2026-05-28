@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>材料有机化学 · 期末复习</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #1b1d23;
+  --sidebar-bg: #14161b;
+  --card-bg: #22252d;
+  --card-hover: #282b35;
+  --text: #e2ddd4;
+  --text-secondary: #a09b91;
+  --text-muted: #6b6760;
+  --accent: #d4a853;
+  --accent-glow: #f0c96d;
+  --border: #2e3039;
+  --tag-bg: #2a2d35;
+  --chapter-current: #252830;
+  --divider: #2a2c34;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --sidebar-width: 260px;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; scroll-padding-top:24px; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  z-index: 100;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  margin-bottom: 28px;
+  flex-shrink: 0;
+}
+
+.sidebar-header .logo {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.sidebar-header .subtitle {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sidebar-nav { flex:1; list-style:none; }
+
+.sidebar-nav li { margin-bottom: 1px; }
+
+.sidebar-nav a {
+  display: block;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: all var(--transition);
+  border-left: 2px solid transparent;
+  letter-spacing: 0.01em;
+}
+
+.sidebar-nav a:hover {
+  background: var(--chapter-current);
+  color: var(--text);
+  border-left-color: var(--accent);
+}
+
+.sidebar-nav a.active {
+  background: var(--chapter-current);
+  color: var(--accent-glow);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+.sidebar-nav a .num {
+  display: inline-block;
+  width: 22px;
+  font-size: 0.68rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.sidebar-nav a .badge {
+  float: right;
+  font-size: 0.65rem;
+  background: var(--tag-bg);
+  color: var(--text-muted);
+  padding: 1px 7px;
+  border-radius: 10px;
+  margin-top: 2px;
+}
+
+.sidebar-nav a:hover .badge { background: #333840; color: var(--accent); }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--divider);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ── Main Content ── */
+.main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  padding: 40px 48px 80px;
+  max-width: 1100px;
+  width: calc(100% - var(--sidebar-width));
+}
+
+/* Hero */
+.hero {
+  margin-bottom: 48px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.hero h1 {
+  font-family: "Noto Serif SC", serif;
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: #efe8da;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
+.hero .tagline {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hero .tagline span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.hero .tagline span::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+/* Chapter Section */
+.chapter {
+  margin-bottom: 56px;
+}
+
+.chapter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.chapter-num {
+  font-family: "Noto Serif SC", serif;
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--accent);
+  opacity: 0.35;
+  line-height: 1;
+  min-width: 52px;
+}
+
+.chapter-title {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #e8e2d6;
+  letter-spacing: 0.02em;
+}
+
+.chapter-title small {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+/* Image Gallery */
+.gallery-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gallery-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--divider);
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.image-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+}
+
+.image-card:hover {
+  border-color: #4a4d58;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+.image-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.image-card .img-label {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 8px 14px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  font-size: 0.72rem;
+  color: #ccc;
+  letter-spacing: 0.02em;
+}
+
+/* Answer Section */
+.answer-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  margin: 8px 0 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  transition: all var(--transition);
+  letter-spacing: 0.02em;
+}
+.answer-toggle:hover { background: var(--card-hover); border-color: var(--accent); }
+.answer-toggle .arrow { transition: transform var(--transition); font-size: 0.7rem; }
+.answer-toggle.open .arrow { transform: rotate(90deg); }
+
+.answer-content {
+  display: none;
+  background: #1e2a1a;
+  border: 1px solid #2d3f28;
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+
+.answer-content.show { display: block; }
+
+.answer-content h4 {
+  font-family: "Noto Serif SC", serif;
+  color: #7ec96a;
+  font-size: 0.95rem;
+  margin: 16px 0 8px;
+}
+
+.answer-content h4:first-child { margin-top: 0; }
+
+.answer-content .step {
+  padding: 6px 0 6px 16px;
+  border-left: 2px solid #3a5a30;
+  margin: 8px 0;
+  font-size: 0.84rem;
+  color: #b8c8ae;
+  line-height: 1.7;
+}
+
+.answer-content .step strong { color: #d8e8cc; }
+
+.answer-content .final-answer {
+  margin-top: 14px;
+  padding: 14px 18px;
+  background: rgba(126, 201, 106, 0.08);
+  border: 1px solid rgba(126, 201, 106, 0.2);
+  border-radius: var(--radius-sm);
+  font-size: 0.86rem;
+  color: #c8e0b8;
+}
+
+.answer-content .final-answer strong { color: #7ec96a; }
+
+.answer-content .reaction {
+  font-family: "JetBrains Mono", "Consolas", monospace;
+  font-size: 0.82rem;
+  color: #d0d8c8;
+  padding: 8px 0;
+  letter-spacing: 0.02em;
+}
+
+.answer-content ul { list-style: none; padding-left: 12px; }
+.answer-content ul li {
+  padding: 4px 0 4px 16px;
+  font-size: 0.83rem;
+  color: #b8c8ae;
+  position: relative;
+}
+.answer-content ul li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: #5a8a4a;
+  font-weight: bold;
+}
+
+/* Knowledge Summary Card */
+.knowledge-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 16px;
+}
+
+.knowledge-card h3 {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 14px;
+  letter-spacing: 0.02em;
+}
+
+.knowledge-card .key-points {
+  list-style: none;
+}
+
+.knowledge-card .key-points li {
+  position: relative;
+  padding: 5px 0 5px 20px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.knowledge-card .key-points li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 13px;
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.knowledge-card .key-points li strong {
+  color: #e8dcc8;
+}
+
+/* Quick Table */
+.quick-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin: 12px 0;
+}
+
+.quick-table th {
+  text-align: left;
+  padding: 9px 14px;
+  background: var(--tag-bg);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+}
+
+.quick-table td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--divider);
+  color: var(--text-secondary);
+}
+
+.quick-table tr:hover td { background: rgba(255,255,255,0.015); }
+
+/* Empty state */
+.empty-chapter {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* Image Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal-overlay img {
+  max-width: 94vw;
+  max-height: 94vh;
+  border-radius: 6px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.modal-close {
+  position: fixed;
+  top: 20px; right: 28px;
+  font-size: 2rem;
+  color: #888;
+  cursor: pointer;
+  z-index: 1000;
+  width: 44px; height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+.modal-close:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+/* Back to Top */
+.back-top {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  width: 42px; height: 42px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  transition: all var(--transition);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 90;
+}
+
+.back-top.visible { opacity: 1; pointer-events: auto; }
+.back-top:hover { background: var(--card-hover); color: var(--accent); border-color: var(--accent); }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 16px;
+    gap: 8px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-header { margin-bottom: 0; }
+  .sidebar-nav { display: flex; flex-wrap: wrap; gap: 4px; }
+  .sidebar-nav a { padding: 6px 10px; font-size: 0.74rem; border-left: none; }
+  .sidebar-nav a .badge { display: none; }
+  .sidebar-footer { display: none; }
+  .main { margin-left: 0; width: 100%; padding: 24px 20px 60px; }
+  .hero h1 { font-size: 1.6rem; }
+  .chapter-num { font-size: 2rem; min-width: 36px; }
+  .chapter-title { font-size: 1.2rem; }
+  .image-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 540px) {
+  .hero h1 { font-size: 1.4rem; }
+  .main { padding: 16px 12px 40px; }
+  .image-grid { grid-template-columns: 1fr; }
+  .knowledge-card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">有机化学<br>重点题目</div>
+    <div class="subtitle">陕西科技大学 · 期末复习</div>
+  </div>
+  <ul class="sidebar-nav">
+    <li><a href="#ch01"><span class="num">一</span>有机化合物命名 <span class="badge">1图</span></a></li>
+    <li><a href="#ch02"><span class="num">二</span>烷烃与环烷烃 <span class="badge">4图</span></a></li>
+    <li><a href="#ch03"><span class="num">三</span>立体化学 <span class="badge">1图</span></a></li>
+    <li><a href="#ch04"><span class="num">四</span>卤代烃与亲核取代 <span class="badge">5图</span></a></li>
+    <li><a href="#ch05"><span class="num">五</span>烯烃与炔烃 <span class="badge">1图</span></a></li>
+    <li><a href="#ch06"><span class="num">六</span>芳香烃 <span class="badge">2图</span></a></li>
+    <li><a href="#ch07"><span class="num">七</span>醇、酚、醚 <span class="badge">5图</span></a></li>
+    <li><a href="#ch08"><span class="num">八</span>醛和酮 <span class="badge">3图</span></a></li>
+    <li><a href="#ch09"><span class="num">九</span>羧酸及衍生物 <span class="badge">1图</span></a></li>
+    <li><a href="#ch10"><span class="num">十</span>含氮化合物 <span class="badge">1图</span></a></li>
+    <li><a href="#ch11"><span class="num">十一</span>周环反应 <span class="badge">—</span></a></li>
+    <li><a href="#ch12"><span class="num">十二</span>波谱分析 <span class="badge">—</span></a></li>
+    <li><a href="#ch13"><span class="num">十三</span>合成题 <span class="badge">4图</span></a></li>
+  </ul>
+  <div class="sidebar-footer">共 28 道题目图片<br>考题来源 · 重点掌握</div>
+</aside>
+
+<!-- ── Main Content ── -->
+<main class="main" id="top">
+
+  <section class="hero">
+    <h1>材料有机化学<br>重点题目汇总</h1>
+    <div class="tagline">
+      陕西科技大学 · 期末复习
+      <span>28 道练习题目</span>
+      <span>13 个知识章节</span>
+      <span>考题从图库抽取</span>
+    </div>
+  </section>
+
+  <!-- CH01 -->
+  <section class="chapter" id="ch01">
+    <div class="chapter-header">
+      <div class="chapter-num">01</div>
+      <h2 class="chapter-title">有机化合物命名<small>IUPAC 系统命名法 · 官能团优先顺序</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)">
+        <img src="材料有机化学/IMG_9365.PNG" alt="命名练习题" loading="lazy">
+        <div class="img-label">IMG_9365 · 有机化合物命名</div>
+      </div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>题目 1：命名有机化合物（含氨基苯磺酸类）</h4>
+      <div class="step"><strong>母体识别：</strong>苯磺酸为母体，-SO₃H 直接连在苯环上</div>
+      <div class="step"><strong>编号：</strong>磺酸基所在碳为 1 位，氨基取代位次最小</div>
+      <div class="final-answer">
+        <strong>答案示例：</strong><br>
+        <strong>3-氨基苯磺酸</strong>（间氨基苯磺酸）<br>
+        <strong>5-氨基-1-萘磺酸</strong>（萘环系磺酸衍生物）<br>
+        命名格式：<strong>取代基位次-取代基名-母体名</strong>
+      </div>
+
+      <h4>题目 2：化学方法鉴别——溴水褪色 + 硝酸银氨溶液产生白色沉淀</h4>
+      <div class="step"><strong>Br₂ 水褪色：</strong>化合物含 C=C、C≡C 或为酚类、芳胺（发生亲电取代/氧化）</div>
+      <div class="step"><strong>AgNO₃/NH₃ 白色沉淀：</strong>末端炔烃（RC≡CH）的鉴定反应——生成炔化银白色沉淀</div>
+      <div class="final-answer">
+        <strong>鉴别结论：</strong>同时满足溴水褪色 + 银氨溶液产生白色沉淀 → <strong>末端炔烃（RC≡CH）</strong><br>
+        反应：RC≡CH + Ag(NH₃)₂⁺ → RC≡C-Ag↓（白色）+ NH₄⁺ + NH₃
+      </div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>主链选择</strong>：含官能团的最长碳链</li>
+        <li><strong>编号规则</strong>：从离官能团最近端开始</li>
+        <li><strong>官能团优先级</strong>：羧酸 &gt; 酯 &gt; 酰胺 &gt; 醛 &gt; 酮 &gt; 醇 &gt; 胺 &gt; 烯烃 &gt; 炔烃 &gt; 烷烃</li>
+        <li><strong>立体化学标注</strong>：R/S 构型、E/Z 构型必须标注</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH02 -->
+  <section class="chapter" id="ch02">
+    <div class="chapter-header">
+      <div class="chapter-num">02</div>
+      <h2 class="chapter-title">烷烃与环烷烃<small>自由基稳定性 · 构象分析 · 环烷烃异构</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9357.PNG" alt="烷烃构造式" loading="lazy"><div class="img-label">IMG_9357 · 烷烃构造式</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9358.PNG" alt="丁烷构象" loading="lazy"><div class="img-label">IMG_9358 · 2,3-二甲基丁烷构象</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9360.PNG" alt="环己烷异构" loading="lazy"><div class="img-label">IMG_9360 · 环己烷构造异构体</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9361.PNG" alt="自由基取代" loading="lazy"><div class="img-label">IMG_9361 · 环己烷自由基取代</div></div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>题目 1：写出构象所对应烷烃的构造式</h4>
+      <div class="step"><strong>解题思路：</strong>将 Newman 投影式转换为锯架式或楔形式，再写出构造式。</div>
+      <div class="step"><strong>关键：</strong>Newman 投影中，前面碳的三个键呈 Y 形，后面碳用圆圈表示。确认每个碳上连接的基团后直接写出。</div>
+      <div class="final-answer"><strong>方法：</strong>沿 C-C 键观察，前面的碳的取代基在 Y 形方向，后面的碳的取代基在圆圈边缘。将所有基团归属到两个碳上即为构造式。</div>
+
+      <h4>题目 2：2,3-二甲基丁烷 C2-C3 键旋转——能量最低和最高构象</h4>
+      <div class="step"><strong>分析：</strong>2,3-二甲基丁烷沿 C2-C3 键旋转，每个碳上连接：-H, -CH₃, -CH(CH₃)₂</div>
+      <div class="step"><strong>能量最低（最稳定）构象——对位交叉式：</strong>两个大基团（-CH₃ 和 -CH(CH₃)₂）彼此远离，二面角 180°。在 Newman 投影中，前碳的 CH₃ 与后碳的 CH₃ 交错排列。</div>
+      <div class="step"><strong>能量最高（最不稳定）构象——全重叠式：</strong>两个大基团彼此重叠，二面角 0°。Newman 投影中前后取代基完全重叠。</div>
+      <div class="final-answer">
+        <strong>答案：</strong><br>
+        稳定构象（对位交叉）：两个 CH₃ 处于对位，二面角 ≈ 180°，空间位阻最小<br>
+        不稳定构象（全重叠）：CH₃ 与 CH₃ 重叠，扭转角 ≈ 0°，范德华斥力最大<br>
+        <strong>能量差约 3-5 kcal/mol</strong>（取决于基团大小）
+      </div>
+
+      <h4>题目 3：环己烷的所有构造异构体</h4>
+      <div class="step">环己烷分子式 C₆H₁₂，构造异构体包括不同环大小和支链。</div>
+      <div class="final-answer">
+        <strong>答案（C₆H₁₂ 环烷烃异构体共 12 个）：</strong><br>
+        1. 环己烷 (cyclohexane)<br>
+        2. 甲基环戊烷 (methylcyclopentane)<br>
+        3. 乙基环丁烷 (ethylcyclobutane)<br>
+        4. 1,1-二甲基环丁烷<br>
+        5. 1,2-二甲基环丁烷（顺/反）<br>
+        6. 1,3-二甲基环丁烷（顺/反）<br>
+        7. 丙基环丙烷<br>
+        8. 异丙基环丙烷<br>
+        9. 1-甲基-1-乙基环丙烷<br>
+        10. 1,1,2-三甲基环丙烷等<br>
+      </div>
+
+      <h4>题目 4：环己烷与氯气光照反应</h4>
+      <div class="step"><strong>反应类型：</strong>自由基取代反应（S<sub>R</sub>）</div>
+      <div class="step"><strong>链引发：</strong>Cl₂ → 2Cl·（光照或加热，Cl-Cl 键均裂）</div>
+      <div class="step"><strong>链增长：</strong>Cl· + RH → HCl + R·；R· + Cl₂ → RCl + Cl·</div>
+      <div class="step"><strong>链终止：</strong>Cl· + Cl· → Cl₂；R· + Cl· → RCl；R· + R· → R-R</div>
+      <div class="final-answer"><strong>答案：</strong>产物为氯代环己烷（C₆H₁₁Cl），反应机理为自由基链式反应。由于环己烷中所有 H 等价，得到单一产物。</div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>自由基稳定性</strong>：苄基/烯丙基 &gt; 3° &gt; 2° &gt; 1° &gt; ·CH₃</li>
+        <li><strong>构象</strong>：交叉式最稳定（对位交叉），重叠式能量最高</li>
+        <li><strong>环烷烃</strong>：环己烷椅式构象最稳定</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH03 -->
+  <section class="chapter" id="ch03">
+    <div class="chapter-header">
+      <div class="chapter-num">03</div>
+      <h2 class="chapter-title">立体化学<small>手性碳 · 对映异构 · R/S 构型 · 费歇尔投影式</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9356.PNG" alt="构造异构判断" loading="lazy"><div class="img-label">IMG_9356 · 构造异构、构象异构判断</div></div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>题目：判断每对化合物——构造异构、构象异构还是完全相同（含环己烷取代衍生物）</h4>
+      <div class="step"><strong>判断流程（三步法）：</strong></div>
+      <div class="step"><strong>Step 1 — 查分子式：</strong>两化合物分子式不同 → 不是异构体（不同化合物）。分子式相同 → 继续 Step 2。</div>
+      <div class="step"><strong>Step 2 — 查原子连接顺序：</strong>画出每个化合物的平面结构式。连接顺序不同（如 Cl 在 1 位 vs 2 位）→ <strong>构造异构体 (Constitutional isomers)</strong>。连接顺序相同 → 继续 Step 3。</div>
+      <div class="step"><strong>Step 3 — 查空间关系：</strong>能否通过单键旋转互相转换？能 → <strong>构象异构体 (Conformational isomers)</strong>，不能（需断键才能互变）→ <strong>构型异构体，即对映体/非对映体 (Configurational isomers)</strong>。若能完全重合 → <strong>完全相同 (Identical)</strong>。</div>
+      <div class="final-answer">
+        <strong>题目中具体配对（IMG_9356）：</strong><br>
+        <strong>对(1)：</strong>两个环己烷衍生物，含 Cl 和 CN 取代基。检查 Cl 和 CN 的环上位置和相对立体化学（轴向/赤道）。<br>
+        &emsp;- 若 Cl 和 CN 的相对位置不同（如 1,2- vs 1,4-）→ <strong>构造异构</strong><br>
+        &emsp;- 若位置相同但 stereochemistry 不同（不能通过环翻转互变）→ <strong>构型异构</strong><br>
+        <strong>对(2)：</strong>两个环己烷衍生物，含 Br 和 Cl 取代基。同上方法判断。<br>
+        <strong>关键技巧：</strong>环己烷椅式构象翻转可使轴向↔赤道互换，但不能改变取代基的连接位置。若两个结构通过椅式翻转即可互变 → 构象异构（或同一化合物）。
+      </div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>手性碳</strong>：连接四个不同基团的 sp³ 碳</li>
+        <li><strong>R/S 判断</strong>：按原子序数编号 1→2→3→4，4 放远端，看 1→2→3 旋转方向</li>
+        <li><strong>内消旋体 (meso)</strong>：含两个相同手性中心，分子内有对称面，无旋光活性</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH04 -->
+  <section class="chapter" id="ch04">
+    <div class="chapter-header">
+      <div class="chapter-num">04</div>
+      <h2 class="chapter-title">卤代烃与亲核取代反应<small>SN1/SN2 · 碳正离子 · E1/E2 消除 · Saytzeff 规则</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9362.PNG" alt="卤代烃反应" loading="lazy"><div class="img-label">IMG_9362 · 卤代烃反应解释</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9363.PNG" alt="碳正离子重排" loading="lazy"><div class="img-label">IMG_9363 · 碳正离子重排</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9366.PNG" alt="卤代烃反应" loading="lazy"><div class="img-label">IMG_9366 · 卤代烃化学反应</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9376.PNG" alt="多卤代" loading="lazy"><div class="img-label">IMG_9376 · 多卤代反应</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9381.PNG" alt="鉴别" loading="lazy"><div class="img-label">IMG_9381 · 化学方法鉴别</div></div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>题目 1-2：解释下列事实（碳正离子重排与反应活性）</h4>
+      <div class="step"><strong>碳正离子稳定性：</strong>3° &gt; 2° &gt; 1° &gt; CH₃⁺。苄基型和烯丙基型碳正离子因 p-π 共轭更稳定。</div>
+      <div class="step"><strong>碳正离子重排：</strong>当相邻碳上有更大基团（如 H 或 CH₃）可迁移时，1,2-迁移生成更稳定的碳正离子。驱动因素是热力学稳定性。</div>
+      <div class="step"><strong>SN1 反应中的重排：</strong>离去基团离去后，碳正离子可能发生 1,2-氢迁移或 1,2-甲基迁移，然后亲核试剂进攻重排后的碳正离子。</div>
+      <div class="final-answer">
+        <strong>典型例子：</strong>新戊基溴 (CH₃)₃CCH₂Br 在 SN1 条件下重排为 (CH₃)₂C⁺CH₂CH₃（叔碳正离子），产物为 (CH₃)₂C(OH)CH₂CH₃<br>
+        <strong>解释核心：</strong>重排总是朝向更稳定的碳正离子方向。
+      </div>
+
+      <h4>题目 3：完成下列化学反应（卤代烃反应）</h4>
+      <div class="step"><strong>SN2 反应条件：</strong>强亲核试剂 + 伯卤代烃/仲卤代烃 + 非质子极性溶剂（丙酮、DMSO、DMF）</div>
+      <div class="step"><strong>SN1 反应条件：</strong>弱亲核试剂 + 叔卤代烃 + 极性质子溶剂（水、醇、甲酸）</div>
+      <div class="step"><strong>消除反应 E2：</strong>强碱（NaOH/醇、KOH/醇、RONa）+ 加热 → 烯烃，遵循 Saytzeff 规则</div>
+      <div class="final-answer">
+        <strong>产物判断要点：</strong><br>
+        - 伯 RX + 强亲核试剂(NaOH/H₂O) → 醇（SN2）<br>
+        - 叔 RX + 弱碱(H₂O) → 醇（SN1）+ 少量烯烃<br>
+        - 叔 RX + 强碱(KOH/EtOH, Δ) → 烯烃（E2）<br>
+        - 仲 RX：取决于条件，低温/强亲核偏向 SN2；高温/强碱偏向 E2
+      </div>
+
+      <h4>题目 5：化合物 A → Br₂ 得三溴产物 B → 冷 KMnO₄ 得含一溴的 1,2-二醇</h4>
+      <div class="step"><strong>信息 ①：</strong>A + Br₂ → B（含三个 Br）→ A 含一个 Br + 一个 C=C（加 Br₂ 加 2 个 Br）</div>
+      <div class="step"><strong>信息 ②：</strong>A 使冷 KMnO₄ 褪色 → A 含 C=C（烯烃）。产物为含一个 Br 的 1,2-二醇 → Br 连在 C=C 的碳上（或被 KMnO₄ 氧化时保留）</div>
+      <div class="step"><strong>推断：</strong>A 为含一个 Br 取代的烯烃。最简结构：<strong>CH₂=CHCH₂Br（3-溴丙烯 / 烯丙基溴）</strong></div>
+      <div class="final-answer">
+        <strong>A：CH₂=CH-CH₂Br（烯丙基溴 / 3-bromopropene）</strong><br>
+        <strong>B：BrCH₂-CHBr-CH₂Br（1,2,3-三溴丙烷）</strong><br>
+        <span class="reaction">A + Br₂/CCl₄ → BrCH₂CHBrCH₂Br</span><br>
+        <span class="reaction">A + 冷 KMnO₄ (稀, OH⁻) → HOCH₂CH(OH)CH₂Br（3-溴-1,2-丙二醇）</span>
+      </div>
+
+      <h4>题目 6：化学方法鉴别——AgNO₃ 醇溶液区分卤代烃类型</h4>
+      <div class="step"><strong>测试原理：</strong>RX + AgNO₃ (醇溶液) → AgX↓ + RONO₂。反应速率取决于 R⁺ 稳定性。</div>
+      <div class="step"><strong>立即产生沉淀 →</strong> 叔卤代烃（3° RX，形成稳定 3° 碳正离子）或苄卤/烯丙卤（共轭稳定碳正离子）</div>
+      <div class="step"><strong>加热后产生沉淀 →</strong> 仲卤代烃（2° RX）</div>
+      <div class="step"><strong>加热也无沉淀 →</strong> 伯卤代烃（1° RX，SN2 不经过碳正离子）或芳卤/乙烯基卤（C-X 键强，不电离）</div>
+      <div class="step"><strong>Br₂ 水褪色辅助判断：</strong>褪色 → 含 C=C（烯丙基卤或类似）。不褪色 → 饱和卤代烃或芳卤。</div>
+      <div class="final-answer">
+        <strong>答案：</strong><br>
+        A（加热无沉淀）→ 芳卤（氯苯类，C-X 键与苯环共轭，难断裂）<br>
+        B（立即沉淀）→ 叔卤代烃或苄卤（3° 碳正离子或苄基碳正离子极稳定）<br>
+        C（过一会儿沉淀 + 使 Br₂ 褪色）→ 烯丙基卤（C=C 使 Br₂ 褪色，烯丙基碳正离子较稳定）<br>
+        D（过一会儿沉淀，不褪色）→ 仲卤代烃
+      </div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>SN2</strong>：一步协同，背面进攻，活性 伯&gt;仲&gt;叔（位阻决定）</li>
+        <li><strong>SN1</strong>：两步，碳正离子中间体，活性 叔&gt;仲&gt;伯（碳正离子稳定性）</li>
+        <li><strong>碳正离子稳定性</strong>：3° &gt; 2° &gt; 1° &gt; CH₃⁺，苄基/烯丙基型更稳定</li>
+        <li><strong>Saytzeff 规则</strong>：消除产物为取代基最多的烯烃</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH05 -->
+  <section class="chapter" id="ch05">
+    <div class="chapter-header">
+      <div class="chapter-num">05</div>
+      <h2 class="chapter-title">烯烃与炔烃<small>亲电加成 · Markovnikov 规则 · 过氧化物效应 · 氧化裂解</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9364.PNG" alt="烯烃反应" loading="lazy"><div class="img-label">IMG_9364 · 烯烃氧化反应推断</div></div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>题目：化合物 C₈H₁₆ 的结构推断（O₃ 氧化只得丁酮一种产物）</h4>
+      <div class="step"><strong>信息分析：</strong></div>
+      <div class="step">1. 分子式 C₈H₁₆ → 不饱和度 = (2×8+2-16)/2 = <strong>1</strong> → 含一个 C=C 双键（使 Br₂ 水褪色，溶于浓 H₂SO₄ 也验证了烯烃）</div>
+      <div class="step">2. O₃ 氧化 / Zn 粉水解 → <strong>只有一种产物：丁酮 CH₃COCH₂CH₃</strong>（关键信息！）</div>
+      <div class="step">3. <strong>核心推理：</strong>若臭氧裂解只得单一产物，说明 C=C 两侧的取代模式完全相同（对称烯烃）。每个 C=C 碳裂解后生成一个 C=O，两侧都生成丁酮 → 每个半片都是 (CH₃)(CH₃CH₂)C= 骨架。</div>
+      <div class="step">4. 将两个半片拼回 C=C：(CH₃CH₂)(CH₃)C<strong>=</strong>C(CH₃)(CH₂CH₃)</div>
+      <div class="final-answer">
+        <strong>答案：3,4-二甲基-3-己烯 (3,4-Dimethyl-3-hexene)</strong><br>
+        存在 <strong>E 型和 Z 型</strong> 两种几何异构体（顺反异构）：<br>
+        <span class="reaction">(CH₃CH₂)(CH₃)C=C(CH₃)(CH₂CH₃)</span><br>
+        <br><strong>验证：</strong><br>
+        - 分子式 C₈H₁₆ ✓（两侧各 C₄，共 C₈）<br>
+        - O₃/Zn/H₂O → 2 × CH₃COCH₂CH₃（丁酮）✓<br>
+        - 含 C=C 能使 Br₂ 褪色 ✓<br>
+        - 能与浓 H₂SO₄ 发生亲电加成 ✓
+      </div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>Markovnikov 规则</strong>：H⁺ 加到氢多的碳上（生成更稳定碳正离子）</li>
+        <li><strong>过氧化物效应</strong>：仅 HBr 适用，反 Markovnikov（自由基机理）</li>
+        <li><strong>氧化裂解</strong>：O₃ 氧化断双键得醛/酮；KMnO₄ 热氧化得羧酸</li>
+        <li><strong>炔烃酸性</strong>：RC≡CH 的 H 具酸性 (pKa ≈ 25)，与 NaNH₂ 反应</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH06 -->
+  <section class="chapter" id="ch06">
+    <div class="chapter-header">
+      <div class="chapter-num">06</div>
+      <h2 class="chapter-title">芳香烃<small>Hückel 规则 · 亲电取代 · 定位效应 · Friedel-Crafts</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9380.PNG" alt="芳香反应" loading="lazy"><div class="img-label">IMG_9380 · 芳香族化学反应</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9382.PNG" alt="亲电取代活性" loading="lazy"><div class="img-label">IMG_9382 · 亲电取代活性排序</div></div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>题目 1：完成下列化学反应（芳香族化合物——亲核取代 + 水解）</h4>
+      <div class="step"><strong>反应一：ArCH₂Cl + NaCN/DMSO → ArCH₂CN</strong>（苄氯的 SN2 氰基化，DMSO 为非质子极性溶剂加速 SN2）</div>
+      <div class="step"><strong>反应二：ArCH₂CN + H₃O⁺/Δ → ArCH₂COOH</strong>（腈的酸性水解得羧酸）</div>
+      <div class="step"><strong>反应三：</strong>芳环上的亲电取代反应——硝化（HNO₃/H₂SO₄）、卤代（Br₂/FeBr₃）、F-C 酰基化（RCOCl/AlCl₃）等</div>
+      <div class="final-answer">
+        <strong>反应通式：</strong><br>
+        ArCH₂Cl →(NaCN/DMSO)→ ArCH₂CN →(H₃O⁺, Δ)→ ArCH₂COOH<br>
+        DMSO 为极性非质子溶剂，有利于 SN2 反应；CN⁻ 是良好的亲核试剂。
+      </div>
+
+      <h4>题目 2：化学方法鉴别——水杨酸、苯甲酸、苄基醇（苯甲醇）</h4>
+      <div class="step"><strong>① FeCl₃ 试验：</strong>滴加 FeCl₃ 溶液 → 显紫色 → <strong>水杨酸（邻羟基苯甲酸）</strong>。酚羟基与 Fe³⁺ 络合显色。</div>
+      <div class="step"><strong>② Na₂CO₃ 试验：</strong>加 Na₂CO₃ 溶液 → 产生气泡（CO₂↑）→ <strong>苯甲酸</strong>。羧酸酸性强于碳酸，与 Na₂CO₃ 反应放出 CO₂。</div>
+      <div class="step"><strong>③ 余下：</strong>既不与 FeCl₃ 显色也不与 Na₂CO₃ 反应 → <strong>苄基醇（苯甲醇 C₆H₅CH₂OH）</strong>。醇的酸性太弱不足以与 Na₂CO₃ 反应，无酚羟基也不与 FeCl₃ 显色。</div>
+      <div class="final-answer">
+        <strong>鉴别流程：</strong>FeCl₃ 显色 → 水杨酸；Na₂CO₃ 气泡 → 苯甲酸；两者均不反应 → 苄基醇。<br>
+        关键：水杨酸的酚-OH 与 FeCl₃ 显色；苯甲酸的 -COOH 酸性 > H₂CO₃；苄基醇的一级醇-OH 酸性不足以与 Na₂CO₃ 反应。
+      </div>
+
+      <h4>题目 2：亲电取代反应活性排序（答案：D > B > A > C = E）</h4>
+      <div class="step"><strong>题目中 5 个化合物取代基：</strong>D: -OH（苯酚），B: -CH₃（甲苯），A: 苯（无取代），C: -Cl（氯苯），E: -NO₂（硝基苯）</div>
+      <div class="step"><strong>排序依据：</strong>取代基的电子效应决定苯环电子密度。给电子基 → 活化（加速反应）；吸电子基 → 钝化（减慢反应）。</div>
+      <div class="step">(D) -OH：强给电子（p-π 共轭），强活化，邻对位定位 → <strong>活性最高</strong></div>
+      <div class="step">(B) -CH₃：给电子（超共轭 + 诱导），活化，邻对位定位</div>
+      <div class="step">(A) 苯：无取代，基准</div>
+      <div class="step">(C) -Cl：弱吸电子诱导 + 给电子共轭，弱钝化，但仍是邻对位定位</div>
+      <div class="step">(E) -NO₂：强吸电子（共轭 + 诱导），强钝化，间位定位 → <strong>活性最低</strong></div>
+      <div class="final-answer">
+        <strong>答案：D > B > A > C = E</strong><br>
+        即：苯酚 &gt; 甲苯 &gt; 苯 &gt; 氯苯 ≈ 硝基苯<br>
+        C 和 E 均钝化苯环，在题目设定的条件下反应活性相当（均为最难发生亲电取代的底物）。
+      </div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>芳香性条件</strong>：环状、平面、连续 p 轨道、4n+2 个 π 电子</li>
+        <li><strong>邻对位定位基</strong>：-NH₂, -OH, -OR, -R, -X（活化，卤素例外）</li>
+        <li><strong>间位定位基</strong>：-NO₂, -CN, -COOH, -CHO, -SO₃H（钝化）</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH07 -->
+  <section class="chapter" id="ch07">
+    <div class="chapter-header">
+      <div class="chapter-num">07</div>
+      <h2 class="chapter-title">醇、酚、醚<small>氧化反应 · Lucas 试剂 · Williamson 合成 · 酚酸性</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9370.PNG" alt="醇反应" loading="lazy"><div class="img-label">IMG_9370 · 醇的化学反应</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9372.PNG" alt="醇反应" loading="lazy"><div class="img-label">IMG_9372 · 醇的化学反应</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9373.PNG" alt="HBr反应活性" loading="lazy"><div class="img-label">IMG_9373 · 与HBr反应活性比较</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9374.PNG" alt="醚推断" loading="lazy"><div class="img-label">IMG_9374 · 醚的结构推断</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9375.PNG" alt="烃推断" loading="lazy"><div class="img-label">IMG_9375 · 烃的结构推断</div></div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>题目 1-2：完成下列化学反应（醇的化学性质）</h4>
+      <div class="step"><strong>醇 + Na →</strong> RONa + 1/2 H₂↑（醇的酸性很弱 pKa≈16-18，但与活泼金属反应）</div>
+      <div class="step"><strong>醇 + HX →</strong> RX + H₂O。活性：叔醇 &gt; 仲醇 &gt; 伯醇（SN1 机理为主）</div>
+      <div class="step"><strong>醇 + PBr₃/SOCl₂ →</strong> 伯醇/仲醇转化为溴代烃/氯代烃（无重排）</div>
+      <div class="step"><strong>醇脱水 →</strong> 浓 H₂SO₄/Δ → 烯烃（E1 消除，遵循 Saytzeff 规则）</div>
+
+      <h4>题目 3：比较与 HBr 的反应活性</h4>
+      <div class="step"><strong>活性规律：</strong>醇与 HBr 反应活性取决于碳正离子稳定性。</div>
+      <div class="step">苄醇 &gt; 烯丙醇 &gt; 叔醇 &gt; 仲醇 &gt; 伯醇</div>
+      <div class="final-answer"><strong>答案：</strong>能生成最稳定碳正离子的醇反应最快。苄醇和烯丙醇因共轭效应加速反应。</div>
+
+      <h4>题目 4：C₇H₈O（应为 C₇H₁₆O）结构推断 —— 醚的 HI 裂解</h4>
+      <div class="step"><strong>信息 ①：</strong>常温不与金属钠反应 → 不含 -OH 活泼氢 → 排除醇和酚 → <strong>是醚</strong></div>
+      <div class="step"><strong>信息 ②：</strong>与过量浓 HI 共热 → 醚键断裂：R-O-R' + 2HI → RI + R'I + H₂O。产物之一经 Ag₂O/H₂O 转化为正戊醇 → 该产物为 C₅H₁₁I（碘代戊烷）</div>
+      <div class="step"><strong>信息 ③：</strong>另一产物为 CH₃CH₂I（碘乙烷），而非 CH₃I。结合两碎片 → 原醚为 CH₃CH₂-O-C₅H₁₁（乙基戊基醚）</div>
+      <div class="step"><strong>反应验证：</strong>CH₃CH₂-O-(CH₂)₄CH₃ + 2HI → CH₃CH₂I + I(CH₂)₄CH₃；后者 + Ag₂O/H₂O → HO(CH₂)₄CH₃（正戊醇）✓</div>
+      <div class="final-answer">
+        <strong>答案：乙基戊基醚 (Ethyl pentyl ether)</strong><br>
+        <span class="reaction">CH₃CH₂-O-CH₂CH₂CH₂CH₂CH₃ &ensp;(C₇H₁₆O)</span><br>
+        或写为 <strong>C₂H₅OC₅H₁₁</strong>。常温不与 Na 反应（无-OH），HI 裂解得碘乙烷 + 碘戊烷，碘戊烷经 Ag₂O 水解得正戊醇。<br>
+        <em>注：若原题分子式为 C₇H₈O（芳醚），则可能是苯甲醚 C₆H₅OCH₃ → HI → C₆H₅OH + CH₃I，但酚不能转化为戊醇，OCR 可能存在误读。</em>
+      </div>
+
+      <h4>题目 5：烃 A (C₅H₁₀) → B (C₅H₉Br) → C (C₅H₈) → 戊二醛 全流程推断</h4>
+      <div class="step"><strong>A (C₅H₁₀)：</strong>与 Br₂ 水不反应 → 无 C=C，为环烷烃。UV/Br₂ 只得一种产物 → 10个H全等价 → <strong>环戊烷 (Cyclopentane)</strong></div>
+      <div class="step"><strong>A → B：</strong>环戊烷 + Br₂ (紫外光照) → 自由基取代 → <strong>溴代环戊烷 (C₅H₉Br)</strong>。因所有 H 等价，只得一种一溴代产物。</div>
+      <div class="step"><strong>B → C：</strong>溴代环戊烷 + KOH/EtOH (醇溶液, Δ) → E2 消除 → <strong>环戊烯 (C₅H₈)</strong></div>
+      <div class="step"><strong>C → 戊二醛：</strong>环戊烯 + O₃/Zn/H₂O → 氧化裂解 → <strong>戊二醛 OHC-CH₂-CH₂-CH₂-CHO</strong>（开链，C=C 断裂得两端醛基）</div>
+      <div class="final-answer">
+        <strong>A：环戊烷 &emsp; B：溴代环戊烷 &emsp; C：环戊烯</strong><br>
+        <span class="reaction">C₅H₁₀ →(Br₂/hv)→ C₅H₉Br →(KOH/EtOH, Δ)→ C₅H₈ →(O₃; Zn/H₂O)→ OHCCH₂CH₂CH₂CHO</span><br>
+        关键判据：单一溴代产物 → 所有氢等价 → 五元环（环戊烷的 10 个 H 全部等价）；戊二醛（5C 二醛）验证了五元环烯裂解开环。
+      </div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>醇的氧化</strong>：伯醇→醛→酸；仲醇→酮；叔醇不反应；PCC 可将伯醇停在醛</li>
+        <li><strong>Lucas 试剂</strong>：ZnCl₂/HCl，叔醇立即浑浊，仲醇 5-10min，伯醇加热</li>
+        <li><strong>Williamson 合成</strong>：RONa + R'X → R-O-R'，必须用伯卤代烃</li>
+        <li><strong>酚酸性</strong>：pKa ≈ 10（比醇强），吸电子基增强酸性</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH08 -->
+  <section class="chapter" id="ch08">
+    <div class="chapter-header">
+      <div class="chapter-num">08</div>
+      <h2 class="chapter-title">醛和酮<small>亲核加成 · Tollens/Fehling · Aldol 缩合 · Cannizzaro</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9377.PNG" alt="亲核加成活性" loading="lazy"><div class="img-label">IMG_9377 · 亲核加成活性排序</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9378.PNG" alt="醛酮反应" loading="lazy"><div class="img-label">IMG_9378 · 醛酮化学反应</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9379.PNG" alt="醛酮推断" loading="lazy"><div class="img-label">IMG_9379 · 醛酮结构推断</div></div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>题目 1：羰基化合物亲核加成活性排序（已给出答案：D>C>A>B>E>F>G）</h4>
+      <div class="step"><strong>排序依据：</strong>羰基碳正电性越大（吸电子基越强）+ 位阻越小 → 亲核加成活性越高</div>
+      <div class="step"><strong>逐一分析：</strong></div>
+      <div class="step">(D) F₂CHCHO — 两个 F 强吸电子，羰基碳最缺电子 → <strong>活性最高</strong></div>
+      <div class="step">(C) FCH₂CHO — 一个 F 吸电子，仅次于 D</div>
+      <div class="step">(A) ClCH₂CHO — Cl 吸电子弱于 F，排在 F 之后</div>
+      <div class="step">(B) BrCH₂CHO — Br 吸电子最弱（卤素中电负性 F>Cl>Br）</div>
+      <div class="step">(E) CH₃CH₂CHO — 烷基给电子，活性低于卤代醛</div>
+      <div class="step">(F) PhCHO — 苯环与 C=O 共轭降低羰基碳正电性；醛基直接连苯环，活性低于脂肪醛</div>
+      <div class="step">(G) PhCOCH₃ — 酮（位阻 + 电子效应），且苯环共轭 → <strong>活性最低</strong></div>
+      <div class="final-answer">
+        <strong>答案：D > C > A > B > E > F > G</strong><br>
+        核心规律：吸电子基提高活性（F > Cl > Br），醛 > 酮，脂肪族 > 芳香族
+      </div>
+
+      <h4>题目 2：化学方法鉴别——CH₃CH(OH)CH₃、CH₃CH₂CH₂OH、C₆H₅OH、(CH₃)₃COH、C₆H₅OCH₃</h4>
+      <div class="step"><strong>① Na 金属试验：</strong>加 Na，观察是否产生 H₂↑。不反应（无气泡）→ <strong>C₆H₅OCH₃（苯甲醚）</strong>，无 -OH</div>
+      <div class="step"><strong>② FeCl₃ 试验：</strong>滴加 FeCl₃ 溶液，显紫色 → <strong>C₆H₅OH（苯酚）</strong>，酚羟基与 Fe³⁺ 络合显色</div>
+      <div class="step"><strong>③ Lucas 试剂 (ZnCl₂/浓 HCl)：</strong>余下 3 个醇，分别加 Lucas 试剂 →</div>
+      <div class="step">&emsp;- 立即浑浊/分层 → <strong>(CH₃)₃COH（叔丁醇，3°醇）</strong></div>
+      <div class="step">&emsp;- 5~10 分钟后出现浑浊 → <strong>CH₃CH(OH)CH₃（异丙醇，2°醇）</strong></div>
+      <div class="step">&emsp;- 室温不反应，加热后才浑浊 → <strong>CH₃CH₂CH₂OH（正丙醇，1°醇）</strong></div>
+      <div class="final-answer">
+        <strong>鉴别流程：Na → FeCl₃ → Lucas 试剂</strong>，三步即可区分 5 种化合物。<br>
+        Lucas 反应机理：ROH + HCl →(ZnCl₂)→ RCl + H₂O，活性 3° > 2° > 1°（取决于碳正离子稳定性）。
+      </div>
+
+      <h4>题目 4：化合物 A (C₅H₄O? OCR 疑误) → 氧化 → 丙酮 + B → B 卤仿反应 → CHCl₃ + 丁二酸</h4>
+      <div class="step"><strong>A 的性质：</strong>使 Br₂ 水褪色 → 含 C=C；与苯肼反应 → 含 C=O。A 为不饱和羰基化合物。</div>
+      <div class="step"><strong>氧化反应一：</strong>A + [O] → (CH₃)₂CO（丙酮）+ B。氧化裂解 C=C，一侧生成丙酮 → 含 (CH₃)₂C= 片段。</div>
+      <div class="step"><strong>B 的性质：</strong>有酸性（含-COOH），与 NaOCl 发生卤仿反应 → CHCl₃ + HOOCCH₂CH₂COOH（丁二酸）</div>
+      <div class="step"><strong>B 的结构推导（关键）：</strong>卤仿反应要求含 CH₃CO- 结构。CH₃CO-R + 3NaOCl → CHCl₃ + RCOONa。产物为丁二酸 → R = -CH₂CH₂COOH。故 <strong>B = CH₃COCH₂CH₂COOH（乙酰丙酸 / Levulinic acid）</strong></div>
+      <div class="step"><strong>A 的结构逆推：</strong>逆 ozonolysis：将丙酮 (CH₃)₂CO 的 C=O 碳与 B (CH₃COCH₂CH₂COOH) 的末端羧基碳以 C=C 连接。B 的 -COOH 碳在裂解前应为 =CH-（氧化后变为 -COOH）。</div>
+      <div class="final-answer">
+        <strong>A： (CH₃)₂C=CH-CH₂-CH₂-CO-CH₃（6-甲基-5-庚烯-2-酮，C₈H₁₄O）</strong><br>
+        或异构体：CH₂=C(CH₃)-CH₂-CH₂-CH₂-CO-CH₃（2-甲基-6-庚烯...）<br>
+        <strong>B：CH₃COCH₂CH₂COOH（乙酰丙酸 / 4-氧代戊酸）</strong><br>
+        <span class="reaction"><strong>反应一：</strong>A →(KMnO₄/H⁺)→ (CH₃)₂CO + HOOCCH₂CH₂COCH₃</span><br>
+        <span class="reaction"><strong>反应二：</strong>B + 3NaOCl → CHCl₃ + NaOOCCH₂CH₂COONa →(H⁺)→ HOOCCH₂CH₂COOH</span><br>
+        <em>注：OCR 识别的分子式 C₅H₄O 可能为误读，实际分子式以 C=C 裂解产物反推为准。</em>
+      </div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>亲核加成活性</strong>：甲醛 &gt; 醛 &gt; 酮（电子效应+位阻）</li>
+        <li><strong>Tollens 试剂</strong>：AgNO₃/NH₃，醛发生银镜反应，酮不反应</li>
+        <li><strong>Cannizzaro 反应</strong>：无 α-H 的醛在浓碱中歧化</li>
+        <li><strong>Aldol 缩合</strong>：有 α-H 的醛酮在稀碱中缩合</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH09 -->
+  <section class="chapter" id="ch09">
+    <div class="chapter-header">
+      <div class="chapter-num">09</div>
+      <h2 class="chapter-title">羧酸及衍生物<small>酸性比较 · 酯化/水解 · 酰氯 · Claisen 缩合</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9367.PNG" alt="羧酸衍生物" loading="lazy"><div class="img-label">IMG_9367 · 羧酸衍生物反应</div></div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>题目：完成下列化学反应（羧酸衍生物）</h4>
+      <div class="step"><strong>酸酐的反应：</strong>(CH₃CO)₂O + ROH → CH₃COOR + CH₃COOH（酯化，比羧酸更活泼）</div>
+      <div class="step"><strong>酸酐 + 胺：</strong>(CH₃CO)₂O + RNH₂ → CH₃CONHR + CH₃COOH（乙酰化反应）</div>
+      <div class="step"><strong>硝化反应：</strong>HNO₃/H₂SO₄ 条件下芳环上引入 -NO₂</div>
+      <div class="final-answer">
+        <strong>反应活性顺序（关键考点）：</strong>酰氯 &gt; 酸酐 &gt; 酯 &gt; 酰胺<br>
+        原因：离去基团碱性越弱越易离去。Cl⁻ 最弱碱 → 酰氯最活泼；NH₂⁻ 最强碱 → 酰胺最不活泼。<br>
+        <strong>酯化：</strong>酸催化可逆；<strong>酯水解：</strong>碱性条件不可逆（皂化）。
+      </div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>酸性</strong>：三氯乙酸 &gt; 二氯乙酸 &gt; 一氯乙酸 &gt; 甲酸 &gt; 苯甲酸 &gt; 乙酸</li>
+        <li><strong>衍生物活性</strong>：酰氯 &gt; 酸酐 &gt; 酯 &gt; 酰胺（离去基团稳定性）</li>
+        <li><strong>Claisen 缩合</strong>：两分子酯在碱作用下缩合生成 β-酮酸酯</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH10 -->
+  <section class="chapter" id="ch10">
+    <div class="chapter-header">
+      <div class="chapter-num">10</div>
+      <h2 class="chapter-title">含氮化合物<small>胺的碱性 · 重氮化 · Sandmeyer · 偶合反应</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9371.JPG" alt="含氮化合物" loading="lazy"><div class="img-label">IMG_9371 · 含氮化合物反应</div></div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>题目：完成下列化学反应（含氮化合物）</h4>
+      <div class="step"><strong>卤代烃 + NH₃ →</strong> 胺（亲核取代）。过量 NH₃ 有利于伯胺生成，但常得混合产物。</div>
+      <div class="step"><strong>Gabriel 合成法：</strong>邻苯二甲酰亚胺钾 + RX → 纯伯胺（避免多烷基化）</div>
+      <div class="step"><strong>酰胺还原：</strong>RCONH₂ + LiAlH₄ → RCH₂NH₂</div>
+      <div class="step"><strong>还原胺化：</strong>C=O + NH₃/NaBH₃CN → CH-NH₂</div>
+      <div class="final-answer">
+        <strong>胺的碱性排序（考点）：</strong><br>
+        脂肪仲胺 &gt; 脂肪伯胺 &gt; 脂肪叔胺 &gt; NH₃ &gt; 芳香伯胺<br>
+        芳香胺碱性弱的原因：N 上孤对电子与苯环共轭，电子密度降低。
+      </div>
+
+      <h4>重氮化反应及合成应用</h4>
+      <div class="step"><strong>重氮化条件：</strong>ArNH₂ + NaNO₂ + 2HCl (0-5°C，必须低温)</div>
+      <div class="step"><strong>重氮盐的转化：</strong></div>
+      <div class="step">- H₃PO₂ 还原：ArN₂⁺ → ArH（去氨基）</div>
+      <div class="step">- Sandmeyer：ArN₂⁺ + CuX → ArX (X=Cl, Br, CN)</div>
+      <div class="step">- 水解：ArN₂⁺ + H₂O/H⁺/Δ → ArOH</div>
+      <div class="step">- 偶合：ArN₂⁺ + Ar'H → Ar-N=N-Ar'（偶氮染料，需酚或芳胺）</div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>胺的碱性</strong>：仲胺 &gt; 伯胺 &gt; 叔胺 &gt; 氨 &gt; 芳香胺（水溶液中）</li>
+        <li><strong>重氮化</strong>：ArNH₂ + NaNO₂ + 2HCl (0-5°C) → ArN₂⁺Cl⁻</li>
+        <li><strong>Sandmeyer</strong>：ArN₂⁺ + CuCl/CuBr → ArCl/ArBr</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH11 -->
+  <section class="chapter" id="ch11">
+    <div class="chapter-header">
+      <div class="chapter-num">11</div>
+      <h2 class="chapter-title">周环反应<small>Diels-Alder · [4+2] 环加成 · endo 规则</small></h2>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>Diels-Alder 反应核心要点</h4>
+      <div class="step"><strong>反应通式：</strong>共轭二烯 + 亲二烯体 → 六元环烯烃（[4+2] 环加成）</div>
+      <div class="step"><strong>立体化学：</strong>顺式加成——二烯体和亲二烯体的立体化学在产物中保留</div>
+      <div class="step"><strong>endo 规则：</strong>亲二烯体上有不饱和基团（C=O, C≡N）时，endo 过渡态因次级轨道相互作用更稳定，动力学产物以 endo 为主</div>
+      <div class="final-answer">
+        <strong>典型例子：</strong><br>
+        1,3-丁二烯 + 乙烯 → 环己烯<br>
+        1,3-丁二烯 + 马来酸酐 → endo-环加成产物<br>
+        环戊二烯 + 苯醌 → endo-双环产物<br>
+        <strong>考点：</strong>endo 选择性、区域选择性（给电子二烯 + 吸电子亲二烯体）
+      </div>
+    </div>
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>Diels-Alder</strong>：共轭二烯 + 亲二烯体 → 六元环（顺式加成）</li>
+        <li><strong>endo 规则</strong>：endo 过渡态有次级轨道作用，动力学产物通常为 endo 构型</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CH12 -->
+  <section class="chapter" id="ch12">
+    <div class="chapter-header">
+      <div class="chapter-num">12</div>
+      <h2 class="chapter-title">波谱分析<small>IR 特征吸收 · ¹H NMR 化学位移 · n+1 裂分规则</small></h2>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>波谱推断结构解题步骤</h4>
+      <div class="step">1. <strong>计算不饱和度</strong>：U = (2C+2+N-H-X)/2，初步判断骨架</div>
+      <div class="step">2. <strong>IR 分析</strong>：1700+ cm⁻¹ → C=O；3200-3600 cm⁻¹ → O-H/N-H；1600 cm⁻¹ → 苯环/C=C</div>
+      <div class="step">3. <strong>¹H NMR 分析</strong>：化学位移判断质子类型；积分比 = 质子数比；裂分遵循 n+1 规则</div>
+      <div class="step">4. <strong>MS 分析</strong>（如有）：分子离子峰确定分子量；碎片峰反推结构片段</div>
+      <div class="step">5. <strong>综合组装：</strong>将各片段按不饱和度和化学合理性拼接，验证所有数据</div>
+      <div class="final-answer">
+        <strong>常见考查方式：</strong>给出 IR 特征峰 + NMR 信号 + 分子式 → 推断结构<br>
+        解题关键：先算不饱和度判断芳环/羰基，再用 NMR 确定取代模式。
+      </div>
+    </div>
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <table class="quick-table">
+        <tr><th>官能团</th><th>IR 波数 (cm⁻¹)</th><th>¹H NMR δ (ppm)</th></tr>
+        <tr><td>C=O 羰基</td><td>1680–1750</td><td>—</td></tr>
+        <tr><td>O-H 醇</td><td>3200–3600 (宽)</td><td>—</td></tr>
+        <tr><td>-CHO 醛氢</td><td>—</td><td>9.0–10.0</td></tr>
+        <tr><td>芳氢</td><td>—</td><td>6.5–8.5</td></tr>
+        <tr><td>-COOH 羧酸</td><td>2500–3300 (很宽)</td><td>10.0–13.0</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- CH13 -->
+  <section class="chapter" id="ch13">
+    <div class="chapter-header">
+      <div class="chapter-num">13</div>
+      <h2 class="chapter-title">合成题<small>逆合成分析 · Grignard · Aldol · Wittig · 保护基策略</small></h2>
+    </div>
+    <div class="gallery-label">题目图片</div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9368.PNG" alt="合成题" loading="lazy"><div class="img-label">IMG_9368 · 以苯为原料合成</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9369.PNG" alt="合成题" loading="lazy"><div class="img-label">IMG_9369 · 以苯/甲苯为原料合成</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9383.PNG" alt="合成题" loading="lazy"><div class="img-label">IMG_9383 · 指定原料合成</div></div>
+      <div class="image-card" onclick="openModal(this.querySelector('img').src)"><img src="材料有机化学/IMG_9384.PNG" alt="合成题" loading="lazy"><div class="img-label">IMG_9384 · 指定原料合成</div></div>
+    </div>
+    <button class="answer-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('show')">
+      查看答案与解析 <span class="arrow">▶</span>
+    </button>
+    <div class="answer-content">
+      <h4>合成题解题方法论（逆合成分析 —— 四步法）</h4>
+      <div class="step"><strong>Step 1 — 分析目标分子：</strong>识别官能团、碳骨架、官能团相对位置关系（邻/间/对）</div>
+      <div class="step"><strong>Step 2 — 逆推切断：</strong>在关键键处"切断"，思考该键可通过什么反应构建。优先在官能团附近切断。</div>
+      <div class="step"><strong>Step 3 — 选择合成子：</strong>确定每个切断对应的合成等价物（亲电/亲核试剂），转化为可购买的原料。</div>
+      <div class="step"><strong>Step 4 — 正向书写：</strong>从原料出发，写出每一步反应条件、试剂、中间体和最终产物。每步都要标注反应条件。</div>
+
+      <h4>IMG_9368 / IMG_9369：以苯或甲苯为原料合成芳香族化合物（定位效应为核心）</h4>
+      <div class="step"><strong>核心策略——利用定位效应控制取代位置：</strong></div>
+      <div class="step">邻对位定位基（-CH₃, -NH₂, -OH, -Cl）：使新基团上邻/对位</div>
+      <div class="step">间位定位基（-NO₂, -COOH, -SO₃H, -COCH₃）：使新基团上间位</div>
+      <div class="step"><strong>常见目标分子合成模板：</strong></div>
+      <div class="final-answer">
+        <strong>路线 ①：苯 → 间二硝基苯</strong><br>
+        C₆H₆ →(HNO₃/H₂SO₄)→ C₆H₅NO₂ →(HNO₃/H₂SO₄, Δ)→ m-C₆H₄(NO₂)₂<br>
+        （第一个 NO₂ 是间位定位基，第二个 NO₂ 进间位）<br><br>
+        <strong>路线 ②：甲苯 → 对硝基甲苯 / 邻硝基甲苯</strong><br>
+        C₆H₅CH₃ →(HNO₃/H₂SO₄, 低温)→ p-CH₃C₆H₄NO₂ + o-CH₃C₆H₄NO₂<br>
+        （CH₃ 是邻对位定位基，硝化进入邻/对位）<br><br>
+        <strong>路线 ③：苯 → 间硝基苯胺</strong><br>
+        C₆H₆ →(HNO₃/H₂SO₄)→ C₆H₅NO₂ →(Sn/HCl 或 Fe/HCl 或 H₂/Pd)→ m-C₆H₄(NO₂)(NH₂)<br>
+        注意：不能先 NH₂ 后 NO₂，因为 NH₂ 是邻对位定位基。必须先 NO₂（间位定位基控制位置）。<br><br>
+        <strong>路线 ④：苯 → 对溴硝基苯</strong><br>
+        C₆H₆ →(Br₂/FeBr₃)→ C₆H₅Br →(HNO₃/H₂SO₄)→ p-BrC₆H₄NO₂ + o-BrC₆H₄NO₂<br>
+        （Br 是邻对位定位基）
+      </div>
+
+      <h4>IMG_9383 / IMG_9384：指定原料合成（多步骤串联）</h4>
+      <div class="step"><strong>常见合成工具包（必须掌握）：</strong></div>
+      <div class="step"><strong>① 硝化 → 还原 → 重氮化 → Sandmeyer 串联：</strong>ArH →(HNO₃/H₂SO₄)→ ArNO₂ →(Fe/HCl)→ ArNH₂ →(NaNO₂/HCl, 0-5°C)→ ArN₂⁺Cl⁻ →(CuCl)→ ArCl / →(CuBr)→ ArBr / →(CuCN)→ ArCN / →(H₃PO₂)→ ArH / →(H₂O, Δ)→ ArOH</div>
+      <div class="step"><strong>② Friedel-Crafts → Clemmensen 串联：</strong>ArH →(RCOCl/AlCl₃)→ ArCOR →(Zn-Hg/HCl, Δ)→ ArCH₂R（引入直链烷基，避免重排）</div>
+      <div class="step"><strong>③ 磺化 → 碱熔 → 酚：</strong>ArH →(发烟 H₂SO₄)→ ArSO₃H →(NaOH 碱熔, 300°C; H⁺)→ ArOH</div>
+      <div class="step"><strong>④ 保护基策略：</strong>当 NH₂ 和 OH 易被氧化/反应时，先乙酰化保护（CH₃COCl 或 (CH₃CO)₂O），反应完毕再水解去保护。</div>
+      <div class="final-answer">
+        <strong>路线示例：苯 → 间氯苯胺 (m-ClC₆H₄NH₂)</strong><br>
+        C₆H₆ →(HNO₃/H₂SO₄)→ C₆H₅NO₂ →(Cl₂/FeCl₃)→ m-ClC₆H₄NO₂ →(Fe/HCl)→ m-ClC₆H₄NH₂<br>
+        注意顺序：NO₂（间位定位）先引入，再 Cl（Cl 是邻对位但 NO₂ 控制为间位），最后还原 NO₂ → NH₂。<br><br>
+        <strong>关键考点：</strong>多取代苯的合成顺序不能随意调换——必须根据定位效应设计先后顺序，确保每个新基团进入正确位置。
+      </div>
+    </div>
+
+    <div class="knowledge-card">
+      <h3>速记要点</h3>
+      <ul class="key-points">
+        <li><strong>核心策略</strong>：逆合成切断法，从产物倒推原料</li>
+        <li><strong>碳链构建</strong>：Grignard 反应、Aldol 缩合、Claisen 缩合、Wittig 反应、Diels-Alder</li>
+        <li><strong>官能团转化</strong>：氧化/还原、取代、消除、保护基策略</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<!-- Image Modal -->
+<div class="modal-overlay" id="modal" onclick="closeModal()">
+  <div class="modal-close" onclick="closeModal()">&times;</div>
+  <img src="" alt="题目放大" id="modal-img">
+</div>
+
+<!-- Back to Top -->
+<div class="back-top" id="backTop" onclick="document.getElementById('top').scrollIntoView({behavior:'smooth'})">&#8593;</div>
+
+<script>
+// Image modal
+function openModal(src) {
+  document.getElementById('modal-img').src = src;
+  document.getElementById('modal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// Active sidebar link on scroll
+const sections = document.querySelectorAll('.chapter');
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const id = entry.target.id;
+      const link = document.querySelector(`.sidebar-nav a[href="#${id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+
+// Back to top
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+  backTop.classList.toggle('visible', window.scrollY > 600);
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' && !document.getElementById('modal').classList.contains('show')) {
+    const active = document.querySelector('.sidebar-nav a.active');
+    if (active) {
+      const all = [...navLinks];
+      const idx = all.indexOf(active);
+      if (idx < all.length - 1) all[idx + 1].click();
+    }
+  }
+  if (e.key === 'ArrowLeft' && !document.getElementById('modal').classList.contains('show')) {
+    const active = document.querySelector('.sidebar-nav a.active');
+    if (active) {
+      const all = [...navLinks];
+      const idx = all.indexOf(active);
+      if (idx > 0) all[idx - 1].click();
+    }
+  }
+});
+</script>
+
+</body>
+</html>
